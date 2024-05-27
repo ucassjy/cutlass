@@ -269,7 +269,7 @@ public:
   CUTLASS_HOST_DEVICE
   int64_t output_size() const {
 
-    return (N * P * Q * K);
+    return ((int64_t)N * P * Q * K);
   }
   
   /// Returns padding as Tensor4DCoord

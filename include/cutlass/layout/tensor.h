@@ -135,9 +135,9 @@ public:
   static TensorNHWC packed(TensorCoord const &extent) {
     return TensorNHWC(
       make_Coord(
-        extent.c(), 
-        extent.w() * extent.c(),
-        extent.h() * extent.w() * extent.c()
+        LongIndex(extent.c()), 
+        LongIndex(extent.w()) * extent.c(),
+        LongIndex(extent.h()) * extent.w() * extent.c()
       )
     );
   }
@@ -146,9 +146,9 @@ public:
   CUTLASS_HOST_DEVICE
   LongIndex operator()(TensorCoord const &coord) const {
     return coord.c() + 
-      LongIndex(stride_[0] * coord.w()) + 
-      LongIndex(stride_[1] * coord.h()) +
-      LongIndex(stride_[2] * coord.n());
+      LongIndex(stride_[0]) * coord.w() + 
+      LongIndex(stride_[1]) * coord.h() +
+      LongIndex(stride_[2]) * coord.n();
   }
   
   /// Returns the offset of a pitchlinear coordinate in linear memory. 
@@ -214,7 +214,7 @@ public:
         || (extent.h() * stride_[1] > stride_[2])) {
       assert(0);
     }
-    return extent.n() * stride_[2];
+    return (LongIndex)extent.n() * extent.w() * extent.h() * extent.c();
   }
 };
 
